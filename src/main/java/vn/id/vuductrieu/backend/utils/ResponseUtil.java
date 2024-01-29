@@ -10,4 +10,9 @@ public class ResponseUtil {
         Map<String, String> response = Map.of("message", message);
         return ResponseEntity.status(httpStatus).body(response);
     }
+
+    public static ResponseEntity<Object> internalServerError() {
+        Map<String, String> response = Map.of("message", "Internal server error");
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+    }
 }
