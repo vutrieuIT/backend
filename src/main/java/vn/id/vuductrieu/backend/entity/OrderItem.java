@@ -1,9 +1,6 @@
 package vn.id.vuductrieu.backend.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,10 +17,10 @@ public class OrderItem {
     @OneToOne
     private Product product;
 
-    @OneToOne
-    private Order order;
-
     private Long quantity;
 
     private Long price;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id")
+    private Orders order;
 }

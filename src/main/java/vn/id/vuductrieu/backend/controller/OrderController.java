@@ -4,8 +4,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import vn.id.vuductrieu.backend.dto.OrderDto;
-import vn.id.vuductrieu.backend.entity.Order;
+import vn.id.vuductrieu.backend.entity.Orders;
 import vn.id.vuductrieu.backend.service.OrderService;
 import vn.id.vuductrieu.backend.utils.ResponseUtil;
 
@@ -21,22 +20,22 @@ public class OrderController {
     }
 
     @GetMapping
-    public List<Order> getAllOrders() {
+    public List<Orders> getAllOrders() {
         return orderService.getOrders();
     }
 
     @GetMapping("/{userId}")
-    public List<Order> getAllOrdersByUserId(@PathVariable Long userId) {
+    public List<Orders> getAllOrdersByUserId(@PathVariable Long userId) {
         return orderService.getOrdersByUserId(userId);
     }
 
     @GetMapping("/detail/{id}")
-    public Order getOrder(@PathVariable Long id) {
+    public Orders getOrder(@PathVariable Long id) {
         return orderService.getOrder(id);
     }
 
     @PostMapping
-    public ResponseEntity createOrder(@RequestBody OrderDto orderDto) {
+    public ResponseEntity createOrder(@RequestBody Orders orderDto) {
         try {
             orderService.createOrder(orderDto);
             return ResponseUtil.responseWithMessage(HttpStatus.OK, "Order created successfully");
@@ -46,7 +45,7 @@ public class OrderController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateOrder(@PathVariable Long id, @RequestBody OrderDto orderDto) {
+    public ResponseEntity updateOrder(@PathVariable Long id, @RequestBody Orders orderDto) {
         try {
             orderService.updateOrder(id, orderDto);
             return ResponseUtil.responseWithMessage(HttpStatus.OK, "Order updated successfully");

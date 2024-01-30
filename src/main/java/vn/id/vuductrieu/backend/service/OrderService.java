@@ -3,9 +3,7 @@ package vn.id.vuductrieu.backend.service;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-import vn.id.vuductrieu.backend.dto.OrderDto;
-import vn.id.vuductrieu.backend.dto.OrderItemDto;
-import vn.id.vuductrieu.backend.entity.Order;
+import vn.id.vuductrieu.backend.entity.Orders;
 import vn.id.vuductrieu.backend.entity.OrderItem;
 import vn.id.vuductrieu.backend.repository.OrderItemRepository;
 import vn.id.vuductrieu.backend.repository.OrderRepository;
@@ -23,24 +21,24 @@ public class OrderService {
         this.orderItemRepository = orderItemRepository;
     }
 
-    public List<Order> getOrders() {
+    public List<Orders> getOrders() {
         return orderRepository.findAll();
     }
 
-    public List<Order> getOrdersByUserId(Long userId) {
+    public List<Orders> getOrdersByUserId(Long userId) {
         return orderRepository.findByUserId(userId);
     }
 
-    public OrderDto getOrder(Long id) {
-        Order order = orderRepository.findById(id).orElse(null);
+    public Orders getOrder(Long id) {
+        Orders order = orderRepository.findById(id).orElse(null);
         if (order == null) {
             throw new EmptyResultDataAccessException("order not found" ,1);
         }
 
-        OrderDto orderDto = new OrderDto();
+        Orders orderDto = new Orders();
         BeanUtils.copyProperties(order, orderDto);
 
-        List<OrderItemDto> orderItems = orderItemRepository.findByOrderId(id);
+        List<OrderItem> orderItems = orderItemRepository.findByOrderId(id);
         if (orderItems == null) {
             throw new EmptyResultDataAccessException("order items not found" ,1);
         }
@@ -49,14 +47,14 @@ public class OrderService {
         return orderDto;
     }
 
-    public void createOrder(OrderDto orderDto) {
-        Order order = new Order();
+    public void createOrder(Orders orderDto) {
+        Orders order = new Orders();
         BeanUtils.copyProperties(orderDto, order);
         order = orderRepository.save(order);
 
         Long totalPrice = 0L;
 
-        for (OrderItemDto orderItemDto : orderDto.getOrderItems()) {
+        for (OrderItem orderItemDto : orderDto.getOrderItems()) {
             OrderItem orderItem = new OrderItem();
             totalPrice += orderItemDto.getPrice() * orderItemDto.getQuantity();
             BeanUtils.copyProperties(orderItemDto, orderItem);
@@ -68,12 +66,12 @@ public class OrderService {
         orderRepository.save(order);
     }
 
-    public void updateOrder(Long orderId, OrderDto orderDto) {
+    public void updateOrder(Long orderId, Orders orderDto) {
         if (orderDto.getOrderItems() == null) {
             throw new EmptyResultDataAccessException("need least 1 product" ,1);
         }
 
-        Order order = orderRepository.findById(orderId).orElse(null);
+        Orders order = orderRepository.findById(orderId).orElse(null);
         if (order == null) {
             throw new EmptyResultDataAccessException("order not found" ,1);
         }
@@ -83,7 +81,7 @@ public class OrderService {
 
         Long totalPrice = 0L;
 
-        for (OrderItemDto orderItemDto : orderDto.getOrderItems()) {
+        for (OrderItem orderItemDto : orderDto.getOrderItems()) {
             OrderItem orderItem = orderItemRepository.findById(orderItemDto.getId()).orElse(null);
             if (orderItem == null) {
                 throw new EmptyResultDataAccessException("order item not found" ,1);
@@ -96,7 +94,7 @@ public class OrderService {
     }
 
     public void deleteOrder(Long id) {
-        Order order = orderRepository.findById(id).orElse(null);
+        Orders order = orderRepository.findById(id).orElse(null);
         if (order == null) {
             throw new EmptyResultDataAccessException("order not found" ,1);
         }
