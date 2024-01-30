@@ -12,7 +12,7 @@ public class ResponseUtil {
     }
 
     public static ResponseEntity<Object> internalServerError() {
-        Map<String, String> response = Map.of("message", "Internal server error");
+        Map<String, String> response = Map.of("message", "contact admin, please");
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 }
